@@ -9,11 +9,11 @@
 import Foundation
 import CallKit
 
-public class User {
-    /// Phone number or NPA-NXX prefix. e.g. "800-555" part of "800-555-5555"
+public struct User: Codable {
+    /// Phone number of user
     public var phoneNumber: CXCallDirectoryPhoneNumber?
+    public var blocklist: [Contact] = []
+    public var whitelist: [Contact] = []
     
-    public init() {
-        
-    }
+    public init() {}
 }

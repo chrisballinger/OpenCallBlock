@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import CallKit
 
-struct Contact {
+public struct Contact: Codable {
     /// Phone number
-    var number: UInt
-    /// Whether or not to exclude this entry from the blocklist
-    var whitelist: Bool
+    public var number: CXCallDirectoryPhoneNumber
+    
+    public init(number: CXCallDirectoryPhoneNumber) {
+        self.number = number
+    }
 }

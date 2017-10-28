@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="24c-d9-arm">
-                                <rect key="frame" x="55" y="118" width="265" height="431"/>
+                                <rect key="frame" x="55" y="153" width="265" height="360"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter 🇺🇸 Phone Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Q7-Tt-4Au">
                                         <rect key="frame" x="0.0" y="0.0" width="265" height="40"/>
@@ -86,21 +85,30 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RHt-Ly-YVe">
-                                        <rect key="frame" x="0.0" y="200" width="265" height="171"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extension Active: ❌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDe-0S-cNL">
+                                        <rect key="frame" x="0.0" y="200" width="265" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="SVD-e9-bmE"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RHt-Ly-YVe">
+                                        <rect key="frame" x="0.0" y="240" width="265" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="UNe-CI-iLT"/>
+                                        </constraints>
                                         <state key="normal" title="Edit Whitelist"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="baQ-2w-0gR">
-                                        <rect key="frame" x="0.0" y="371" width="265" height="30"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGS-yo-BtM">
-                                        <rect key="frame" x="0.0" y="401" width="265" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGS-yo-BtM">
+                                        <rect key="frame" x="0.0" y="300" width="265" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="K0v-yD-p9r"/>
+                                        </constraints>
                                         <state key="normal" title="Reset..."/>
                                     </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="24c-d9-arm" secondAttribute="height" multiplier="265:431" id="KMM-PC-ggW"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -114,8 +122,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="vIS-Rl-Uf7"/>
                     <connections>
+                        <outlet property="blockedLabel" destination="WWc-Z5-7nq" id="XpQ-mQ-z11"/>
+                        <outlet property="extensionActiveLabel" destination="XDe-0S-cNL" id="dZN-Zf-gMv"/>
                         <outlet property="numberField" destination="CWh-w8-q4L" id="GFK-5m-Tb2"/>
                         <outlet property="prefixLabel" destination="kLM-bg-LWF" id="dnt-Iq-8ym"/>
+                        <outlet property="whitelistLabel" destination="flg-xO-ngR" id="AVq-Cj-gqb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
