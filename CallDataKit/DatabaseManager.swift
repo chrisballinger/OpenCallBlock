@@ -17,28 +17,34 @@ private struct Constants {
 public class DatabaseManager {
     public static let shared = DatabaseManager()
     
-    private var defaults = UserDefaults(suiteName: Constants.AppGroupName)
+    /// This is shared between the app and CallDirectoryExtension
+    private var storage = UserDefaults(suiteName: Constants.AppGroupName)
     private let encoder = PropertyListEncoder()
     private let decoder = PropertyListDecoder()
     
     /// Fetches or saves User data to shared storage
-    public var user: User {
+    public var user: User? {
         get {
             var user: User? = nil
-            if let userData = defaults?.object(forKey: Constants.UserKey) as? Data {
-                user = try? decoder.decode(User.self, from: userData)
+            if let userData = storage?.object(forKey: Constants.UserKey) as? Data {
+                do {
+                    user = try decoder.decode(User.self, from: userData)
+                } catch {
+                    DDLogError("Could not decode User: \(error)")
+                }
             }
-            if let user = user {
-                return user
-            } else {
-                return User()
-            }
+            return user
         }
         set {
+            guard let newUser = newValue else {
+                storage?.removeObject(forKey: Constants.UserKey)
+                storage?.synchronize()
+                return
+            }
             do {
-                let userData = try encoder.encode(newValue)
-                defaults?.set(userData, forKey: Constants.UserKey)
-                defaults?.synchronize()
+                let userData = try encoder.encode(newUser)
+                storage?.set(userData, forKey: Constants.UserKey)
+                storage?.synchronize()
             } catch {
                 DDLogError("Could not encode User: \(error)")
             }

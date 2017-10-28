@@ -276,8 +276,7 @@
 				D9B7E0B61FA3CB1E0078D5FA /* CocoaLumberjackSwift.framework */,
 				D9B7E0B71FA3CB1E0078D5FA /* YapDatabase.framework */,
 			);
-			name = Carthage;
-			path = "New Group";
+			path = Carthage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -11,6 +11,7 @@ import CallDataKit
 import PhoneNumberKit
 import CocoaLumberjackSwift
 import CallKit
+import Contacts
 
 private struct Constants {
     static let CallDirectoryExtensionIdentifier = "io.ballinger.OpenCallBlock.CallDirectoryExtension"
@@ -61,15 +62,15 @@ class ViewController: UIViewController {
     }
     
     /// Refresh UI from User data
-    private func refreshUserState(_ user: User) {
-        if let number = user.phoneNumber {
+    private func refreshUserState(_ user: User?) {
+        if let number = user?.me.rawNumber {
             numberField.text = "\(number)"
             refreshNpaNxx(numberString: "\(number)")
         } else {
             numberField.text = ""
         }
-        whitelistLabel.text = "\(UIStrings.Whitelist): \(user.whitelist.count) \(UIStrings.Numbers)"
-        blockedLabel.text = "\(UIStrings.Blocked): \(user.blocklist.count) \(UIStrings.Numbers)"
+        whitelistLabel.text = "\(UIStrings.Whitelist): \(user?.whitelist.count ?? 0) \(UIStrings.Numbers)"
+        blockedLabel.text = "\(UIStrings.Blocked): \(user?.blocklist.count ?? 0) \(UIStrings.Numbers)"
 
     }
     
@@ -83,8 +84,48 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         refreshExtensionState()
         refreshUserState(database.user)
+    }
+    
+    @IBAction func refreshWhitelist(_ sender: Any) {
+        guard var user = database.user else {
+            DDLogError("Must create a user first")
+            return
+        }
+        
+        let store = CNContactStore()
+        store.requestAccess(for: .contacts) { (success, error) in
+            if let error = error {
+                DDLogError("Contacts permission error: \(error)")
+                return
+            }
+            var whitelist: Set<Contact> = []
+            do {
+                let request = CNContactFetchRequest(keysToFetch: [CNContactPhoneNumbersKey as CNKeyDescriptor])
+                try store.enumerateContacts(with: request, usingBlock: { (contact, stop) in
+                    for number in contact.phoneNumbers {
+                        do {
+                            let numberString = number.value.stringValue
+                            let phoneNumber = try self.numberKit.parse(numberString, withRegion: "us", ignoreType: true)
+                            let contact = Contact(phoneNumber: phoneNumber)
+                            whitelist.insert(contact)
+                        } catch {
+                            DDLogError("Error parsing phone number: \(error)")
+                        }
+                    }
+                })
+            } catch {
+                DDLogError("Could not enumerate contacts \(error)")
+            }
+            user.whitelist = whitelist
+            user.refreshBlocklist()
+            self.database.user = user
+            DispatchQueue.main.async {
+                self.refreshUserState(user)
+            }
+        }
     }
     
     @IBAction func numberFieldEditingChanged(_ sender: Any) {
@@ -111,18 +152,19 @@ class ViewController: UIViewController {
         
         if shouldSave {
             var user = database.user
-            user.phoneNumber = CXCallDirectoryPhoneNumber(number.nationalNumber)
-            database.user = user
+            user?.me = Contact(phoneNumber: number)
+            if user == nil {
+                user = User(phoneNumber: number)
+            }
+            // TODO: move this
+            user?.refreshBlocklist()
+            if let user = user {
+                database.user = user
+            }
+            refreshUserState(user)
         }
     }
-    
-    private func refreshBlocklist() {
-        
-    }
-    
-    private func refreshWhitelist() {
-        
-    }
+
 }
 
 

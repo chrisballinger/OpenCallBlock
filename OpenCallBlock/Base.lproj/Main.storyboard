@@ -99,7 +99,10 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="UNe-CI-iLT"/>
                                         </constraints>
-                                        <state key="normal" title="Edit Whitelist"/>
+                                        <state key="normal" title="Refresh Whitelist from Contacts"/>
+                                        <connections>
+                                            <action selector="refreshWhitelist:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kQd-90-CtU"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGS-yo-BtM">
                                         <rect key="frame" x="0.0" y="300" width="265" height="60"/>

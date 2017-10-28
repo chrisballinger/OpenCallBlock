@@ -8,12 +8,28 @@
 
 import Foundation
 import CallKit
+import PhoneNumberKit
 
-public struct Contact: Codable {
-    /// Phone number
-    public var number: CXCallDirectoryPhoneNumber
+public struct Contact: Codable, Hashable {
+    /// Raw phone number
+    public var rawNumber: CXCallDirectoryPhoneNumber
     
-    public init(number: CXCallDirectoryPhoneNumber) {
-        self.number = number
+    public init(rawNumber: CXCallDirectoryPhoneNumber) {
+        self.rawNumber = rawNumber
     }
+    
+    public init(phoneNumber: PhoneNumber) {
+        let rawNumber = phoneNumber.countryCode * 10_000_000_000 + phoneNumber.nationalNumber
+        self.rawNumber = CXCallDirectoryPhoneNumber(rawNumber)
+    }
+    
+    // MARK: Hashable
+    
+    public var hashValue: Int {
+        return Int(rawNumber)
+    }
+    
+    public static func ==(lhs: Contact, rhs: Contact) -> Bool {
+        return lhs.rawNumber == rhs.rawNumber
+    }    
 }
