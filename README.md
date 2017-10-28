@@ -10,6 +10,10 @@ There are a number of free and paid apps that promise to block this kind of spam
 
 This app simply takes a US phone number like 800-555-5555, extracts the NPA-NXX prefix (e.g. 800-555), and then generates a blocklist of every number from 800-555-0000 to 800-555-9999. You can grant access to your contacts and automatically whitelist people you already know, or enter them manually. **No personal data ever leaves your device.**
 
+For it to work you must enable the extension after installation:
+
+* Settings => Phone => Call Blocking & Identification => Enable OpenCallBlock
+
 Requires iOS 10 or higher.
 
 ### License
