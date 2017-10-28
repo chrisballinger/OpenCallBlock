@@ -18,9 +18,16 @@ public class DatabaseManager {
     public static let shared = DatabaseManager()
     
     /// This is shared between the app and CallDirectoryExtension
-    private var storage = UserDefaults(suiteName: Constants.AppGroupName)
+    private var storage: UserDefaults?
     private let encoder = PropertyListEncoder()
     private let decoder = PropertyListDecoder()
+    
+    init() {
+        storage = UserDefaults(suiteName: Constants.AppGroupName)
+        if storage == nil {
+            DDLogError("Shared storage could not be initialized!")
+        }
+    }
     
     /// Fetches or saves User data to shared storage
     public var user: User? {

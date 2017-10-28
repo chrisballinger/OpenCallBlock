@@ -16,8 +16,10 @@ public struct User: Codable {
     
     /// Phone number of user
     public var me: Contact
-    public var blocklist: Set<Contact> = []
-    public var whitelist: Set<Contact> = []
+    /// Ordered block list of phone numbers
+    public var blocklist: [Contact] = []
+    /// Ordered white list of phone numbers
+    public var whitelist: [Contact] = []
     
     // MARK: Init
     
@@ -50,6 +52,6 @@ public struct User: Codable {
         
         blocklist.remove(me)
         blocklist.subtract(whitelist)
-        self.blocklist = blocklist
+        self.blocklist = blocklist.sorted()
     }
 }

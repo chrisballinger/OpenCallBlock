@@ -8,11 +8,29 @@
 
 import Foundation
 import CallKit
+import CallDataKit
+import CocoaLumberjackSwift
 
 class CallDirectoryHandler: CXCallDirectoryProvider {
     
+    private let database = DatabaseManager.shared
+    
+    deinit {
+        DDLog.remove(DDTTYLogger.sharedInstance)
+    }
+    
+    override init() {
+        DDLog.add(DDTTYLogger.sharedInstance)
+    }
+    
     override func beginRequest(with context: CXCallDirectoryExtensionContext) {
         context.delegate = self
+        
+        guard let user = database.user else {
+            DDLogWarn("CallDirectoryHandler: No user configured")
+            context.completeRequest()
+            return
+        }
 
         // Check whether this is an "incremental" data request. If so, only provide the set of phone number blocking
         // and identification entries which have been added or removed since the last time this extension's data was loaded.
@@ -20,81 +38,19 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
         // and identification phone numbers if the request is not incremental.
         if #available(iOSApplicationExtension 11.0, *) {
             if context.isIncremental {
-                addOrRemoveIncrementalBlockingPhoneNumbers(to: context)
-                
-                addOrRemoveIncrementalIdentificationPhoneNumbers(to: context)
-            } else {
-                addAllBlockingPhoneNumbers(to: context)
-                
-                addAllIdentificationPhoneNumbers(to: context)
+                context.removeAllBlockingEntries()
+                context.removeAllIdentificationEntries()
             }
-        } else {
-            addAllBlockingPhoneNumbers(to: context)
-            addAllIdentificationPhoneNumbers(to: context)
         }
+        for blockedContact in user.blocklist {
+            let number = blockedContact.rawNumber
+            context.addBlockingEntry(withNextSequentialPhoneNumber: number)
+            context.addIdentificationEntry(withNextSequentialPhoneNumber: number, label: "🚫 NPA-NXX Spam")
+        }
+        
+        DDLogInfo("Blocked \(user.blocklist.count) numbers")
 
         context.completeRequest()
-    }
-
-    private func addAllBlockingPhoneNumbers(to context: CXCallDirectoryExtensionContext) {
-        // Retrieve all phone numbers to block from data store. For optimal performance and memory usage when there are many phone numbers,
-        // consider only loading a subset of numbers at a given time and using autorelease pool(s) to release objects allocated during each batch of numbers which are loaded.
-        //
-        // Numbers must be provided in numerically ascending order.
-        let allPhoneNumbers: [CXCallDirectoryPhoneNumber] = [ 1_408_555_5555, 1_800_555_5555 ]
-        for phoneNumber in allPhoneNumbers {
-            context.addBlockingEntry(withNextSequentialPhoneNumber: phoneNumber)
-        }
-    }
-
-    @available(iOSApplicationExtension 11.0, *)
-    private func addOrRemoveIncrementalBlockingPhoneNumbers(to context: CXCallDirectoryExtensionContext) {
-        // Retrieve any changes to the set of phone numbers to block from data store. For optimal performance and memory usage when there are many phone numbers,
-        // consider only loading a subset of numbers at a given time and using autorelease pool(s) to release objects allocated during each batch of numbers which are loaded.
-        let phoneNumbersToAdd: [CXCallDirectoryPhoneNumber] = [ 1_408_555_1234 ]
-        for phoneNumber in phoneNumbersToAdd {
-            context.addBlockingEntry(withNextSequentialPhoneNumber: phoneNumber)
-        }
-
-        let phoneNumbersToRemove: [CXCallDirectoryPhoneNumber] = [ 1_800_555_5555 ]
-        for phoneNumber in phoneNumbersToRemove {
-            context.removeBlockingEntry(withPhoneNumber: phoneNumber)
-        }
-
-        // Record the most-recently loaded set of blocking entries in data store for the next incremental load...
-    }
-
-    private func addAllIdentificationPhoneNumbers(to context: CXCallDirectoryExtensionContext) {
-        // Retrieve phone numbers to identify and their identification labels from data store. For optimal performance and memory usage when there are many phone numbers,
-        // consider only loading a subset of numbers at a given time and using autorelease pool(s) to release objects allocated during each batch of numbers which are loaded.
-        //
-        // Numbers must be provided in numerically ascending order.
-        let allPhoneNumbers: [CXCallDirectoryPhoneNumber] = [ 1_877_555_5555, 1_888_555_5555 ]
-        let labels = [ "Telemarketer", "Local business" ]
-
-        for (phoneNumber, label) in zip(allPhoneNumbers, labels) {
-            context.addIdentificationEntry(withNextSequentialPhoneNumber: phoneNumber, label: label)
-        }
-    }
-    
-    @available(iOSApplicationExtension 11.0, *)
-    private func addOrRemoveIncrementalIdentificationPhoneNumbers(to context: CXCallDirectoryExtensionContext) {
-        // Retrieve any changes to the set of phone numbers to identify (and their identification labels) from data store. For optimal performance and memory usage when there are many phone numbers,
-        // consider only loading a subset of numbers at a given time and using autorelease pool(s) to release objects allocated during each batch of numbers which are loaded.
-        let phoneNumbersToAdd: [CXCallDirectoryPhoneNumber] = [ 1_408_555_5678 ]
-        let labelsToAdd = [ "New local business" ]
-
-        for (phoneNumber, label) in zip(phoneNumbersToAdd, labelsToAdd) {
-            context.addIdentificationEntry(withNextSequentialPhoneNumber: phoneNumber, label: label)
-        }
-
-        let phoneNumbersToRemove: [CXCallDirectoryPhoneNumber] = [ 1_888_555_5555 ]
-
-        for phoneNumber in phoneNumbersToRemove {
-            context.removeIdentificationEntry(withPhoneNumber: phoneNumber)
-        }
-
-        // Record the most-recently loaded set of identification entries in data store for the next incremental load...
     }
 
 }
@@ -102,6 +58,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
 
     func requestFailed(for extensionContext: CXCallDirectoryExtensionContext, withError error: Error) {
+        DDLogError("CallDirectoryHandler error: \(error)")
         // An error occurred while adding blocking or identification entries, check the NSError for details.
         // For Call Directory error codes, see the CXErrorCodeCallDirectoryManagerError enum in <CallKit/CXError.h>.
         //

@@ -38,6 +38,7 @@
 		D9B7E0C81FA3CF4B0078D5FA /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C31FA3CF470078D5FA /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D9B7E0CB1FA3D8DB0078D5FA /* PhoneNumberKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C91FA3D8D00078D5FA /* PhoneNumberKit.framework */; };
 		D9B7E0CC1FA3D8DB0078D5FA /* PhoneNumberKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C91FA3D8D00078D5FA /* PhoneNumberKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D9C857FF1FA522010011ECD7 /* CallDataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E08F1FA3C69C0078D5FA /* CallDataKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,13 @@
 			remoteInfo = OpenCallBlock;
 		};
 		D9B7E0A21FA3C69C0078D5FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9B7E04F1FA3BE840078D5FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D9B7E08E1FA3C69C0078D5FA;
+			remoteInfo = CallDataKit;
+		};
+		D9C857FC1FA521FA0011ECD7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D9B7E04F1FA3BE840078D5FA /* Project object */;
 			proxyType = 1;
@@ -136,6 +144,7 @@
 		D9B7E0C31FA3CF470078D5FA /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = SOURCE_ROOT; };
 		D9B7E0C91FA3D8D00078D5FA /* PhoneNumberKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhoneNumberKit.framework; path = Carthage/Build/iOS/PhoneNumberKit.framework; sourceTree = SOURCE_ROOT; };
 		D9B7E0CD1FA3F7CC0078D5FA /* CallDirectoryExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CallDirectoryExtension.entitlements; sourceTree = "<group>"; };
+		D9C858001FA522CA0011ECD7 /* OpenCallBlock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenCallBlock.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9C857FF1FA522010011ECD7 /* CallDataKit.framework in Frameworks */,
 				D9B7E0BC1FA3CB1E0078D5FA /* YapDatabase.framework in Frameworks */,
 				D9B7E0C51FA3CF480078D5FA /* CocoaLumberjack.framework in Frameworks */,
 				D9B7E0B91FA3CB1E0078D5FA /* CocoaLumberjackSwift.framework in Frameworks */,
@@ -199,6 +209,7 @@
 				D9B7E0901FA3C69C0078D5FA /* CallDataKit */,
 				D9B7E09D1FA3C69C0078D5FA /* CallDataKitTests */,
 				D9B7E0581FA3BE840078D5FA /* Products */,
+				D9C857FE1FA522010011ECD7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -217,6 +228,7 @@
 		D9B7E0591FA3BE840078D5FA /* OpenCallBlock */ = {
 			isa = PBXGroup;
 			children = (
+				D9C858001FA522CA0011ECD7 /* OpenCallBlock.entitlements */,
 				D9B7E05A1FA3BE840078D5FA /* AppDelegate.swift */,
 				D9B7E05C1FA3BE840078D5FA /* ViewController.swift */,
 				D9B7E05E1FA3BE840078D5FA /* Main.storyboard */,
@@ -277,6 +289,13 @@
 				D9B7E0B71FA3CB1E0078D5FA /* YapDatabase.framework */,
 			);
 			path = Carthage;
+			sourceTree = "<group>";
+		};
+		D9C857FE1FA522010011ECD7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,6 +363,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D9C857FD1FA521FA0011ECD7 /* PBXTargetDependency */,
 			);
 			name = CallDirectoryExtension;
 			productName = CallDirectoryExtension;
@@ -400,6 +420,11 @@
 					D9B7E0561FA3BE840078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					D9B7E06A1FA3BE840078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
@@ -591,6 +616,11 @@
 			target = D9B7E08E1FA3C69C0078D5FA /* CallDataKit */;
 			targetProxy = D9B7E0A21FA3C69C0078D5FA /* PBXContainerItemProxy */;
 		};
+		D9C857FD1FA521FA0011ECD7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D9B7E08E1FA3C69C0078D5FA /* CallDataKit */;
+			targetProxy = D9C857FC1FA521FA0011ECD7 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -725,6 +755,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OpenCallBlock/OpenCallBlock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4T8JLQR6GR;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -746,6 +777,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OpenCallBlock/OpenCallBlock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4T8JLQR6GR;
 				FRAMEWORK_SEARCH_PATHS = (

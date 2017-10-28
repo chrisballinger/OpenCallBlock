@@ -10,7 +10,8 @@ import Foundation
 import CallKit
 import PhoneNumberKit
 
-public struct Contact: Codable, Hashable {
+public struct Contact: Codable, Hashable, Comparable {
+    
     /// Raw phone number
     public var rawNumber: CXCallDirectoryPhoneNumber
     
@@ -31,5 +32,11 @@ public struct Contact: Codable, Hashable {
     
     public static func ==(lhs: Contact, rhs: Contact) -> Bool {
         return lhs.rawNumber == rhs.rawNumber
-    }    
+    }
+    
+    // MARK: Comparable
+    
+    public static func <(lhs: Contact, rhs: Contact) -> Bool {
+        return lhs.rawNumber < rhs.rawNumber
+    }
 }

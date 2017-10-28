@@ -50,6 +50,13 @@ class ViewController: UIViewController {
 
     /// Check whether or not extension is active
     private func refreshExtensionState() {
+        CXCallDirectoryManager.sharedInstance.reloadExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (error) in
+            if let error = error {
+                DDLogError("Error reloading CXCallDirectoryManager extension \(error)")
+            } else {
+                DDLogError("Reloaded CXCallDirectoryManager extension")
+            }
+        }
         CXCallDirectoryManager.sharedInstance.getEnabledStatusForExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (status, error) in
             DispatchQueue.main.async {
                 if status == .enabled {
@@ -119,7 +126,7 @@ class ViewController: UIViewController {
             } catch {
                 DDLogError("Could not enumerate contacts \(error)")
             }
-            user.whitelist = whitelist
+            user.whitelist = whitelist.sorted()
             user.refreshBlocklist()
             self.database.user = user
             DispatchQueue.main.async {
