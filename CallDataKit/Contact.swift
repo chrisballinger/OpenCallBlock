@@ -15,8 +15,24 @@ public struct Contact: Codable, Hashable, Comparable {
     /// Raw phone number
     public var rawNumber: CXCallDirectoryPhoneNumber
     
+    public func phoneNumber(_ numberKit: PhoneNumberKit) -> PhoneNumber? {
+        let numberString = "\(rawNumber)"
+        guard let number = try? numberKit.parse(numberString, withRegion: "us", ignoreType: true) else {
+            return nil
+        }
+        return number
+    }
+    
     public init(rawNumber: CXCallDirectoryPhoneNumber) {
         self.rawNumber = rawNumber
+    }
+    
+    public init?(numberString: String) {
+        let numberKit = PhoneNumberKit()
+        guard let number = try? numberKit.parse(numberString, withRegion: "us", ignoreType: true) else {
+            return nil
+        }
+        self.init(phoneNumber: number)
     }
     
     public init(phoneNumber: PhoneNumber) {

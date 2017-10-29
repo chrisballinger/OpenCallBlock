@@ -15,6 +15,8 @@ import Contacts
 
 private struct Constants {
     static let CallDirectoryExtensionIdentifier = "io.ballinger.OpenCallBlock.CallDirectoryExtension"
+    static let EditBlocklistSegue = "editBlocklist"
+    static let EditWhitelistSegue = "editWhitelist"
 }
 
 private struct UIStrings {
@@ -96,6 +98,11 @@ class ViewController: UIViewController {
         refreshUserState(database.user)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     @IBAction func refreshWhitelist(_ sender: Any) {
         guard var user = database.user else {
             DDLogError("Must create a user first")
@@ -172,6 +179,19 @@ class ViewController: UIViewController {
         }
     }
 
+    
+     // MARK: - Navigation
+     
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Show List editor for white/block list
+        guard let user = database.user,
+            let listEditor = segue.destination as? ListEditorViewController,
+            let identifier = segue.identifier,
+            let listEditorSegue = ListEditorSegue(rawValue: identifier) else {
+            return
+        }
+        listEditor.setupWithUser(user, editorType: listEditorSegue.editorType)
+     }
 }
 
 
