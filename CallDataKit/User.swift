@@ -38,7 +38,7 @@ public struct User: Codable {
     public var whitelist: [Contact] = []
     
     /// Extra blocking of NPA-NX* (e.g. 555-55X-XXXX)
-    public var extraBlocking: Bool = false
+    public var extraBlocking: Bool? = false
     
     // MARK: Init
     
@@ -64,7 +64,7 @@ public struct User: Codable {
         // If regular NPA-NXX we want to block 555-555-XXX
         // but with "extra blocking" we want to block 555-55X-XXXX
         var maxBlockedNumbers: Int64 = 10_000
-        if extraBlocking {
+        if extraBlocking ?? false {
             maxBlockedNumbers = 100_000
         }
         let startNumber = (me.rawNumber / maxBlockedNumbers) * maxBlockedNumbers
