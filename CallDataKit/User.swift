@@ -37,6 +37,9 @@ public struct User: Codable {
     /// Ordered white list of phone numbers. Do not edit these directly, use mutating functions below.
     public var whitelist: [Contact] = []
     
+    /// Extra blocking of NPA-NX* (e.g. 555-55X-XXXX)
+    public var extraBlocking: Bool = false
+    
     // MARK: Init
     
     public init(phoneNumber: PhoneNumber) {
@@ -49,6 +52,29 @@ public struct User: Codable {
     
     public init(me: Contact) {
         self.me = me
+    }
+    
+    // MARK: Blocklist Generation
+    
+    /**
+     * Returns the full blocklist without subtracting any whitelist
+     */
+    public func fullBlocklist() -> Set<Contact> {
+        var blocklist: Set<Contact> = []
+        // If regular NPA-NXX we want to block 555-555-XXX
+        // but with "extra blocking" we want to block 555-55X-XXXX
+        var maxBlockedNumbers: Int64 = 10_000
+        if extraBlocking {
+            maxBlockedNumbers = 100_000
+        }
+        let startNumber = (me.rawNumber / maxBlockedNumbers) * maxBlockedNumbers
+        
+        for i in 0..<maxBlockedNumbers {
+            let rawNumber = startNumber + CXCallDirectoryPhoneNumber(i)
+            let contact = Contact(rawNumber: rawNumber)
+            blocklist.insert(contact)
+        }
+        return blocklist
     }
     
     // MARK: Editing
@@ -91,15 +117,7 @@ public struct User: Codable {
      * Refreshes NPA-NXX block list for your number, minus whitelist
      */
     public mutating func refreshBlocklist() {
-        var blocklist: Set<Contact> = []
-        let startNumber = (me.rawNumber / 10_000) * 10_000
-        
-        for i in 0..<10_000 {
-            let rawNumber = startNumber + CXCallDirectoryPhoneNumber(i)
-            let contact = Contact(rawNumber: rawNumber)
-            blocklist.insert(contact)
-        }
-        
+        var blocklist = self.fullBlocklist()
         blocklist.remove(me)
         blocklist.subtract(whitelist)
         self.blocklist = blocklist.sorted()

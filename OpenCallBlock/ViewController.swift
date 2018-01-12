@@ -13,43 +13,55 @@ import CocoaLumberjackSwift
 import CallKit
 import Contacts
 
-private struct Constants {
-    static let CallDirectoryExtensionIdentifier = "io.ballinger.OpenCallBlock.CallDirectoryExtension"
-    static let EditBlocklistSegue = "editBlocklist"
-    static let EditWhitelistSegue = "editWhitelist"
-}
 
-private struct UIStrings {
-    static let ExtensionActive = "Extension Active"
-    static let NpaNxxPrefix = "NPA-NXX Prefix"
-    static let Whitelist = "Whitelist"
-    static let Blocked = "Blocked"
-    static let Numbers = "numbers"
-}
-
-extension PhoneNumber {
-    /// Returns NPA-NXX prefix of US number e.g. 800-555-5555 returns 800-555
-    var npaNxx: UInt64? {
-        guard countryCode == 1 else { return nil }
-        return nationalNumber/10_000
-    }
-    var npaNxxString: String? {
-        guard let npaNxx = self.npaNxx else { return nil }
-        return "\(npaNxx / 1000)-\(npaNxx % 1000)"
-    }
-}
 
 class ViewController: UIViewController {
+    
+    // MARK: - Properties
     
     @IBOutlet weak var numberField: PhoneNumberTextField!
     @IBOutlet weak var prefixLabel: UILabel!
     @IBOutlet weak var extensionActiveLabel: UILabel!
     @IBOutlet weak var blockedLabel: UILabel!
     @IBOutlet weak var whitelistLabel: UILabel!
+    @IBOutlet weak var extraBlockingSwitch: UISwitch!
     
     let numberKit = PhoneNumberKit()
     private let database = DatabaseManager.shared
-
+    
+    private var user: User? {
+        get {
+            return database.user
+        }
+        set {
+            database.user = newValue
+        }
+    }
+    
+    // MARK: - View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        numberField.delegate = self
+        numberField.maxDigits = 10
+        numberField.withPrefix = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        refreshExtensionState()
+        refreshUserState(user)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    // MARK: - Data Refresh
+    
     /// Check whether or not extension is active
     private func refreshExtensionState() {
         CXCallDirectoryManager.sharedInstance.reloadExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (error) in
@@ -80,31 +92,45 @@ class ViewController: UIViewController {
         }
         whitelistLabel.text = "\(UIStrings.Whitelist): \(user?.whitelist.count ?? 0) \(UIStrings.Numbers)"
         blockedLabel.text = "\(UIStrings.Blocked): \(user?.blocklist.count ?? 0) \(UIStrings.Numbers)"
+        extraBlockingSwitch.isOn = user?.extraBlocking ?? false
+    }
+    
+    /// Refreshes NPA-NXX field, optionally saving User data
+    func refreshNpaNxx(numberString: String, shouldSave: Bool = false) {
+        var _number: PhoneNumber? = nil
+        do {
+            _number = try numberKit.parse(numberString, withRegion: "us", ignoreType: true)
+        } catch {
+            //DDLogWarn("Bad number \(error)")
+        }
+        guard let number = _number,
+            let npaNxx = number.npaNxxString else { return }
+        
+        // valid number found
+        numberField.resignFirstResponder()
+        prefixLabel.text = "\(UIStrings.NpaNxxPrefix): \(npaNxx)"
+        
+        if shouldSave {
+            var user = self.user
+            user?.me = Contact(phoneNumber: number)
+            if user == nil {
+                user = User(phoneNumber: number)
+            }
+            user?.extraBlocking = extraBlockingSwitch.isOn
+            // TODO: move this
+            user?.refreshBlocklist()
+            if let user = user {
+                self.user = user
+            }
+            refreshUserState(user)
+        }
+    }
+    
+    // MARK: - UI Outlets
 
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        numberField.delegate = self
-        numberField.maxDigits = 10
-        numberField.withPrefix = false
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        refreshExtensionState()
-        refreshUserState(database.user)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
     
     @IBAction func refreshWhitelist(_ sender: Any) {
-        guard var user = database.user else {
+        guard var user = self.user else {
             DDLogError("Must create a user first")
             return
         }
@@ -135,11 +161,20 @@ class ViewController: UIViewController {
             }
             user.whitelist = whitelist.sorted()
             user.refreshBlocklist()
-            self.database.user = user
+            self.user = user
             DispatchQueue.main.async {
                 self.refreshUserState(user)
             }
         }
+    }
+    
+    @IBAction func extraBlockingValueChanged(_ sender: Any) {
+        if var user = self.user {
+            user.extraBlocking = extraBlockingSwitch.isOn
+            user.refreshBlocklist()
+            self.user = user
+        }
+        refreshUserState(self.user)
     }
     
     @IBAction func numberFieldEditingChanged(_ sender: Any) {
@@ -148,43 +183,13 @@ class ViewController: UIViewController {
         }
         refreshNpaNxx(numberString: numberString, shouldSave: true)
     }
-    
-    /// Refreshes NPA-NXX field, optionally saving User data
-    func refreshNpaNxx(numberString: String, shouldSave: Bool = false) {
-        var _number: PhoneNumber? = nil
-        do {
-            _number = try numberKit.parse(numberString, withRegion: "us", ignoreType: true)
-        } catch {
-            //DDLogWarn("Bad number \(error)")
-        }
-        guard let number = _number,
-            let npaNxx = number.npaNxxString else { return }
-        
-        // valid number found
-        numberField.resignFirstResponder()
-        prefixLabel.text = "\(UIStrings.NpaNxxPrefix): \(npaNxx)"
-        
-        if shouldSave {
-            var user = database.user
-            user?.me = Contact(phoneNumber: number)
-            if user == nil {
-                user = User(phoneNumber: number)
-            }
-            // TODO: move this
-            user?.refreshBlocklist()
-            if let user = user {
-                database.user = user
-            }
-            refreshUserState(user)
-        }
-    }
 
     
      // MARK: - Navigation
      
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Show List editor for white/block list
-        guard let user = database.user,
+        guard let user = self.user,
             let listEditor = segue.destination as? ListEditorViewController,
             let identifier = segue.identifier,
             let listEditorSegue = ListEditorSegue(rawValue: identifier) else {
@@ -194,6 +199,35 @@ class ViewController: UIViewController {
      }
 }
 
+// MARK: - Constants
+
+private struct Constants {
+    static let CallDirectoryExtensionIdentifier = "io.ballinger.OpenCallBlock.CallDirectoryExtension"
+    static let EditBlocklistSegue = "editBlocklist"
+    static let EditWhitelistSegue = "editWhitelist"
+}
+
+private struct UIStrings {
+    static let ExtensionActive = "Extension Active"
+    static let NpaNxxPrefix = "NPA-NXX Prefix"
+    static let Whitelist = "Whitelist"
+    static let Blocked = "Blocked"
+    static let Numbers = "numbers"
+}
+
+// MARK: - Extensions
 
 extension ViewController: UITextFieldDelegate {
+}
+
+extension PhoneNumber {
+    /// Returns NPA-NXX prefix of US number e.g. 800-555-5555 returns 800-555
+    var npaNxx: UInt64? {
+        guard countryCode == 1 else { return nil }
+        return nationalNumber/10_000
+    }
+    var npaNxxString: String? {
+        guard let npaNxx = self.npaNxx else { return nil }
+        return "\(npaNxx / 1000)-\(npaNxx % 1000)"
+    }
 }

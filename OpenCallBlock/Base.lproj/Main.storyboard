@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iTI-Ii-q6s">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iTI-Ii-q6s">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="24c-d9-arm">
-                                <rect key="frame" x="55" y="153.5" width="265" height="360"/>
+                                <rect key="frame" x="55" y="138.5" width="265" height="391"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter 🇺🇸 Phone Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Q7-Tt-4Au">
                                         <rect key="frame" x="0.0" y="0.0" width="265" height="40"/>
@@ -51,8 +51,25 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2S-Mb-YYh">
+                                        <rect key="frame" x="0.0" y="120" width="265" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extra Blocking (NPA-NX*)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qt4-uf-Jjj">
+                                                <rect key="frame" x="0.0" y="0.0" width="216" height="31"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JtK-Gd-PSr">
+                                                <rect key="frame" x="216" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="extraBlockingValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="JiB-H3-BBg"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8mO-q7-CT7">
-                                        <rect key="frame" x="0.0" y="120" width="265" height="40"/>
+                                        <rect key="frame" x="0.0" y="151" width="265" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🚫 Blocked: 0 numbers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WWc-Z5-7nq">
                                                 <rect key="frame" x="0.0" y="0.0" width="180" height="40"/>
@@ -73,7 +90,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rtt-aG-oqO">
-                                        <rect key="frame" x="0.0" y="160" width="265" height="40"/>
+                                        <rect key="frame" x="0.0" y="191" width="265" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✅ Whitelist: 0 numbers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flg-xO-ngR">
                                                 <rect key="frame" x="0.0" y="0.0" width="185" height="40"/>
@@ -94,7 +111,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlX-ck-77b">
-                                        <rect key="frame" x="0.0" y="200" width="265" height="40"/>
+                                        <rect key="frame" x="0.0" y="231" width="265" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extension Active: ❌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDe-0S-cNL">
                                                 <rect key="frame" x="0.0" y="0.0" width="158" height="40"/>
@@ -112,7 +129,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RHt-Ly-YVe">
-                                        <rect key="frame" x="0.0" y="240" width="265" height="60"/>
+                                        <rect key="frame" x="0.0" y="271" width="265" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="UNe-CI-iLT"/>
                                         </constraints>
@@ -122,7 +139,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGS-yo-BtM">
-                                        <rect key="frame" x="0.0" y="300" width="265" height="60"/>
+                                        <rect key="frame" x="0.0" y="331" width="265" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="K0v-yD-p9r"/>
                                         </constraints>
@@ -144,6 +161,7 @@
                     <connections>
                         <outlet property="blockedLabel" destination="WWc-Z5-7nq" id="XpQ-mQ-z11"/>
                         <outlet property="extensionActiveLabel" destination="XDe-0S-cNL" id="dZN-Zf-gMv"/>
+                        <outlet property="extraBlockingSwitch" destination="JtK-Gd-PSr" id="wpm-WP-NSp"/>
                         <outlet property="numberField" destination="CWh-w8-q4L" id="GFK-5m-Tb2"/>
                         <outlet property="prefixLabel" destination="kLM-bg-LWF" id="dnt-Iq-8ym"/>
                         <outlet property="whitelistLabel" destination="flg-xO-ngR" id="AVq-Cj-gqb"/>
