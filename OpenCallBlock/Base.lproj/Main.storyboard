@@ -125,6 +125,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Peo-46-C74">
                                                 <rect key="frame" x="158" y="0.0" width="107" height="40"/>
                                                 <state key="normal" title="Enable"/>
+                                                <connections>
+                                                    <action selector="enableExtensionPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="J5c-0L-MWK"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
