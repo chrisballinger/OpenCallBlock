@@ -64,21 +64,38 @@ class ViewController: UIViewController {
     
     /// Check whether or not extension is active
     private func refreshExtensionState() {
-        CXCallDirectoryManager.sharedInstance.reloadExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (error) in
-            if let error = error {
-                DDLogError("Error reloading CXCallDirectoryManager extension \(error)")
+        CXCallDirectoryManager.sharedInstance.reloadExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (reloadError) in
+            if let error = reloadError {
+                DDLogError("Error reloading CXCallDirectoryManager extension: \(error)")
             } else {
-                DDLogError("Reloaded CXCallDirectoryManager extension")
+                DDLogError("Reloaded CXCallDirectoryManager extension.")
             }
-        }
-        CXCallDirectoryManager.sharedInstance.getEnabledStatusForExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (status, error) in
-            DispatchQueue.main.async {
-                if status == .enabled {
-                    self.extensionActiveLabel.text = "\(UIStrings.ExtensionActive): ✅"
+            CXCallDirectoryManager.sharedInstance.getEnabledStatusForExtension(withIdentifier: Constants.CallDirectoryExtensionIdentifier) { (status, statusError) in
+                if let error = statusError {
+                    DDLogError("Error getting status for CXCallDirectoryManager extension: \(error)")
                 } else {
-                    self.extensionActiveLabel.text = "\(UIStrings.ExtensionActive): ❌"
+                    DDLogError("Got status for CXCallDirectoryManager extension: \(status)")
+                }
+                DispatchQueue.main.async {
+                    if reloadError != nil || statusError != nil {
+                        self.setExtensionLabelActive(nil)
+                    } else {
+                        self.setExtensionLabelActive(status == .enabled)
+                    }
                 }
             }
+        }
+    }
+    
+    private func setExtensionLabelActive(_ active: Bool?) {
+        guard let active = active else {
+            self.extensionActiveLabel.text = "\(UIStrings.ExtensionActive): ⚠️"
+            return
+        }
+        if active {
+            self.extensionActiveLabel.text = "\(UIStrings.ExtensionActive): ✅"
+        } else {
+            self.extensionActiveLabel.text = "\(UIStrings.ExtensionActive): ❌"
         }
     }
     
@@ -93,6 +110,7 @@ class ViewController: UIViewController {
         whitelistLabel.text = "\(UIStrings.Whitelist): \(user?.whitelist.count ?? 0) \(UIStrings.Numbers)"
         blockedLabel.text = "\(UIStrings.Blocked): \(user?.blocklist.count ?? 0) \(UIStrings.Numbers)"
         extraBlockingSwitch.isOn = user?.extraBlocking ?? false
+        refreshExtensionState()
     }
     
     /// Refreshes NPA-NXX field, optionally saving User data
