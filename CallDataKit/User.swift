@@ -33,9 +33,26 @@ public struct User: Codable {
     /// Phone number of user
     public var me: Contact
     /// Ordered block list of phone numbers. Do not edit these directly, use mutating functions below.
-    public var blocklist: [Contact] = []
+    public var blocklist: [Contact] {
+        get {
+            return _blocklist.toContacts()
+        }
+        set {
+            _blocklist = newValue.toRawNumbers()
+        }
+    }
     /// Ordered white list of phone numbers. Do not edit these directly, use mutating functions below.
-    public var whitelist: [Contact] = []
+    public var whitelist: [Contact] {
+        get {
+            return _whitelist.toContacts()
+        }
+        set {
+            _whitelist = newValue.toRawNumbers()
+        }
+    }
+
+    private var _blocklist: [CXCallDirectoryPhoneNumber] = []
+    private var _whitelist: [CXCallDirectoryPhoneNumber] = []
     
     /// Extra blocking of NPA-NX* (e.g. 555-55X-XXXX)
     public var extraBlocking: Bool? = false

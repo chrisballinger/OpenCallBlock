@@ -8,9 +8,11 @@
 
 import Foundation
 import CocoaLumberjackSwift
+import CallKit
 
 private struct Constants {
     static let AppGroupName = "group.io.ballinger.OpenCallBlock"
+    /// user model
     static let UserKey = "UserKey"
 }
 

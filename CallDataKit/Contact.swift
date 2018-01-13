@@ -10,9 +10,30 @@ import Foundation
 import CallKit
 import PhoneNumberKit
 
+extension Collection where Self.Element == Contact, Self.Index == Int {
+    public func toRawNumbers() -> [CXCallDirectoryPhoneNumber] {
+        var nums: [CXCallDirectoryPhoneNumber] = []
+        forEach { (contact) in
+            nums.append(contact.rawNumber)
+        }
+        return nums
+    }
+}
+
+extension Collection where Self.Element == CXCallDirectoryPhoneNumber, Self.Index == Int {
+    public func toContacts() -> [Contact] {
+        var contacts: [Contact] = []
+        forEach { (number) in
+            let contact = Contact(rawNumber: number)
+            contacts.append(contact)
+        }
+        return contacts
+    }
+}
+
 public struct Contact: Codable, Hashable, Comparable {
     
-    /// Raw phone number
+    /// Raw phone number - Int64
     public var rawNumber: CXCallDirectoryPhoneNumber
     
     public func phoneNumber(_ numberKit: PhoneNumberKit) -> PhoneNumber? {
