@@ -30,15 +30,11 @@
 		D9B7E0BA1FA3CB1E0078D5FA /* CocoaLumberjackSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0B61FA3CB1E0078D5FA /* CocoaLumberjackSwift.framework */; };
 		D9B7E0BC1FA3CB1E0078D5FA /* YapDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0B71FA3CB1E0078D5FA /* YapDatabase.framework */; };
 		D9B7E0BD1FA3CB1E0078D5FA /* YapDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0B71FA3CB1E0078D5FA /* YapDatabase.framework */; };
-		D9B7E0BF1FA3CB370078D5FA /* CocoaLumberjackSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0B61FA3CB1E0078D5FA /* CocoaLumberjackSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D9B7E0C01FA3CB370078D5FA /* YapDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0B71FA3CB1E0078D5FA /* YapDatabase.framework */; };
-		D9B7E0C11FA3CB370078D5FA /* YapDatabase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0B71FA3CB1E0078D5FA /* YapDatabase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D9B7E0C41FA3CF480078D5FA /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C31FA3CF470078D5FA /* CocoaLumberjack.framework */; };
 		D9B7E0C51FA3CF480078D5FA /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C31FA3CF470078D5FA /* CocoaLumberjack.framework */; };
 		D9B7E0C61FA3CF480078D5FA /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C31FA3CF470078D5FA /* CocoaLumberjack.framework */; };
-		D9B7E0C81FA3CF4B0078D5FA /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C31FA3CF470078D5FA /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D9B7E0CB1FA3D8DB0078D5FA /* PhoneNumberKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C91FA3D8D00078D5FA /* PhoneNumberKit.framework */; };
-		D9B7E0CC1FA3D8DB0078D5FA /* PhoneNumberKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E0C91FA3D8D00078D5FA /* PhoneNumberKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D9C857FF1FA522010011ECD7 /* CallDataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B7E08F1FA3C69C0078D5FA /* CallDataKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -105,11 +101,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D9B7E0BF1FA3CB370078D5FA /* CocoaLumberjackSwift.framework in Embed Frameworks */,
 				D9B7E0A51FA3C69C0078D5FA /* CallDataKit.framework in Embed Frameworks */,
-				D9B7E0C81FA3CF4B0078D5FA /* CocoaLumberjack.framework in Embed Frameworks */,
-				D9B7E0CC1FA3D8DB0078D5FA /* PhoneNumberKit.framework in Embed Frameworks */,
-				D9B7E0C11FA3CB370078D5FA /* YapDatabase.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,11 +409,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Chris Ballinger";
 				TargetAttributes = {
 					D9B7E0561FA3BE840078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -431,11 +424,13 @@
 					};
 					D9B7E06A1FA3BE840078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						TestTargetID = D9B7E0561FA3BE840078D5FA;
 					};
 					D9B7E07D1FA3BF670078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -448,11 +443,12 @@
 					};
 					D9B7E08E1FA3C69C0078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 					};
 					D9B7E0961FA3C69C0078D5FA = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						TestTargetID = D9B7E0561FA3BE840078D5FA;
 					};
@@ -542,7 +538,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -661,6 +657,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -668,6 +665,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -719,6 +717,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -726,6 +725,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -773,6 +773,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.OpenCallBlock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -794,6 +795,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.OpenCallBlock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -809,6 +811,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.OpenCallBlockTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenCallBlock.app/OpenCallBlock";
 			};
@@ -825,6 +828,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.OpenCallBlockTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenCallBlock.app/OpenCallBlock";
 			};
@@ -846,6 +850,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.OpenCallBlock.CallDirectoryExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -866,6 +871,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.OpenCallBlock.CallDirectoryExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -895,6 +901,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -925,6 +932,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.CallDataKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -941,6 +949,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.CallDataKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenCallBlock.app/OpenCallBlock";
 			};
@@ -956,6 +965,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ballinger.CallDataKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenCallBlock.app/OpenCallBlock";
 			};

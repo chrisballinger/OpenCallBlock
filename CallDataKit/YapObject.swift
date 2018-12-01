@@ -91,7 +91,7 @@ public class YapObject: YapObjectProtocol {
 extension YapObject: YapObjectFetching {
     /// Fetches from class's default collection `defaultYapCollection`
     public static func fetch(_ transaction: YapDatabaseReadTransaction, yapKey: String) -> Self? {
-        let object = fetch(transaction, yapKey: yapKey)
+        let object = fetch(transaction, yapKey: yapKey, yapCollection: yapDefaultCollection)
         return object
     }
     
@@ -112,8 +112,8 @@ extension YapObject: YapStorable {
         return type(of: self).yapDefaultCollection
     }
     
-    open static var yapDefaultCollection: String {
-        return NSStringFromClass(self)
+    public static var yapDefaultCollection: String {
+        return "\(self)"
     }
 }
 
